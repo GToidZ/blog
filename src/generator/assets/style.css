@@ -1,0 +1,245 @@
+/* Catppuccin Latte (light default) / Mocha (dark) */
+:root {
+  --rosewater: #dc8a78;
+  --red: #d20f39;
+  --peach: #fe640b;
+  --yellow: #df8e1d;
+  --green: #40a02b;
+  --teal: #179299;
+  --blue: #1e66f5;
+  --mauve: #8839ef;
+  --text: #4c4f69;
+  --subtext: #6c6f85;
+  --surface: #eff1f5;
+  --base: #ffffff;
+  --overlay: #e6e9ef;
+  --accent: var(--blue);
+  --heading: "Rubik", "Kanit", "LINE Seed JP", sans-serif;
+  --body: "IBM Plex Sans", "Kanit", "LINE Seed JP", sans-serif;
+}
+:root[data-theme="dark"] {
+  --rosewater: #f5e0dc;
+  --red: #f38ba8;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --blue: #89b4fa;
+  --mauve: #cba6f7;
+  --text: #cdd6f4;
+  --subtext: #a6adc8;
+  --surface: #1e1e2e;
+  --base: #11111b;
+  --overlay: #313244;
+  --accent: var(--mauve);
+}
+
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--base);
+  color: var(--text);
+  font-family: var(--body);
+  line-height: 1.7;
+  padding: 0 max(1.5rem, calc((100vw - 46rem) / 2)) 4rem;
+}
+
+h1, h2, h3 { font-family: var(--heading); line-height: 1.3; }
+a { color: var(--accent); }
+
+/* Header: links left, theme button sticky top-right */
+.site-header {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 0;
+}
+.site-nav { display: flex; gap: 1.5rem; }
+.site-nav a {
+  font-family: var(--heading);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+}
+.site-nav a:hover { color: var(--accent); }
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.theme-toggle:hover { color: var(--accent); }
+
+/* Circular icon-only button (design guideline) */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--overlay);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.icon-btn:hover { color: var(--accent); transform: translateY(-2px); }
+:root[data-theme="dark"] .icon-moon { display: none; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.125em;
+}
+.entry-tags .icon { width: 0.8em; height: 0.8em; margin-right: 0.15em; }
+.tag-heading { display: flex; align-items: center; gap: 0.4rem; }
+
+/* Post list */
+.post-list { list-style: none; margin: 0; padding: 0; }
+.post-item { margin-bottom: 2.5rem; }
+.post-title { margin: 0 0 0.25rem; }
+.post-title a { text-decoration: none; color: var(--text); }
+.post-title a:hover { color: var(--accent); }
+.entry-date { color: var(--subtext); margin: 0 0 0.5rem; font-size: 0.9rem; }
+.entry-tags, .entry-tags li { list-style: none; display: inline; margin: 0; padding: 0; }
+.entry-tags li::after { content: ", "; }
+.entry-tags li:last-child::after { content: ""; }
+.entry-tags a { text-decoration: none; color: var(--teal); }
+
+/* Entry page */
+.entry-header { margin-bottom: 2rem; }
+.entry-title { margin: 0 0 0.25rem; }
+
+/* Pagination */
+.pagination { display: flex; justify-content: space-between; margin-top: 3rem; }
+
+/* Tag page: divider between tag name and entries */
+.tag-divider { border: none; border-top: 1px solid var(--overlay); margin: 1.5rem 0 2.5rem; }
+
+/* Entry body media */
+.entry-body img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+.entry-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  color: var(--subtext);
+}
+
+/* Code blocks: content width, scrollable, themed by hljs.css */
+.entry-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--overlay);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+.entry-body pre code.hljs { background: transparent; padding: 0; }
+
+/* Image annotations (image-annotation extension) */
+.img-annotated { position: relative; margin: 1.5rem 0; }
+.img-annotated img { max-width: 100%; height: auto; display: block; }
+.img-note {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  /* coords are set to % of natural size by main.js → tracks image bounds on any screen width */
+  transform: translate(-50%, -50%);
+  border: 2px dashed var(--accent);
+  border-radius: 50%;
+  cursor: help;
+  transition: transform 0.15s ease;
+}
+.img-note:hover,
+.img-note:focus { transform: translate(-50%, calc(-50% - 3px)); }
+.img-note:focus { outline: none; }
+/* Tooltip: default above-center; main.js clamps/flips within screen bounds */
+.img-tip {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 1rem);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--overlay);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.8rem;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.img-note:hover .img-tip,
+.img-note:focus .img-tip { opacity: 1; }
+
+/* Touch screens: bigger tap target */
+@media (max-width: 40rem) {
+  .img-note { width: 28px; height: 28px; }
+}
+
+/* Terminology backlinks + dialog */
+.term {
+  display: inline-block;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  padding: 0;
+  text-decoration: underline dotted;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.term:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.35));
+}
+.term-dialog {
+  position: relative;
+  width: min(32rem, calc(100vw - 2.5rem));
+  border: 1px solid var(--overlay);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  color: var(--text);
+  padding: 1.5rem;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+}
+.term-dialog[open] { animation: float-up 0.25s ease-out; }
+@keyframes float-up {
+  from { transform: translateY(1rem); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.term-dialog::backdrop { background: rgb(0 0 0 / 0.4); }
+.term-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2rem; height: 2rem; }
+.term-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  font-family: var(--heading);
+  font-size: 1.1rem;
+}
+.term-dialog article > p:first-of-type { margin-top: 0; }
+
+/* Theme switch: circle cutout from button (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+/* Narrow screens: nav links stack top-to-bottom */
+@media (max-width: 40rem) {
+  .site-nav { flex-direction: column; gap: 0.25rem; }
+  body { padding: 0 1.25rem 3rem; }
+}

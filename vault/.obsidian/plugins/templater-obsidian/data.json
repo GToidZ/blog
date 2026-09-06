@@ -1,0 +1,11 @@
+{
+  "templates_folder": "templates",
+  "templates_pairs": [],
+  "trigger_on_file_creation": true,
+  "enable_folder_templates": true,
+  "folder_templates": [
+    { "folder": "posts", "template": "templates/tpl-post.md" },
+    { "folder": "terminology", "template": "templates/tpl-terminology.md" }
+  ],
+  "enable_system_commands": false
+}

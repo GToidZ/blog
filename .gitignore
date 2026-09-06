@@ -1,0 +1,6 @@
+node_modules/
+dist/
+src/generator/test/.tmp-dist/
+vault/.obsidian/workspace.json
+vault/.obsidian/workspace-mobile.json
+vault/.obsidian/plugins/*/data.json.bak

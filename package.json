@@ -1,0 +1,10 @@
+{
+  "name": "dossari",
+  "private": true,
+  "workspaces": ["src/parser", "src/generator"],
+  "scripts": {
+    "generate": "bun src/generator/index.ts",
+    "test": "bun test",
+    "typecheck": "bun run --filter='*' typecheck"
+  }
+}

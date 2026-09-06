@@ -1,0 +1,58 @@
+# Image Annotation Extension
+
+**Status:** implemented
+
+**Trigger syntax:**
+```
+<!--After the image block either ![]() or <img> tag -->
+^(x, y): Annotation content
+```
+
+**Description:**
+Adds annotation to image by having two arguments, positions from left and top in pixels.
+This means read image data first before putting the annotations on top of the image.
+The annotation is a dashed-line circle, raised and show text tooltip on hover.
+
+**Input example:**
+```
+<!--After the image block either ![]() or <img> tag -->
+^(400, 300): Image annotation description
+^(800, 800): Example of bottom-right annotation
+
+Text content
+^(100, 100): This is ignored and shown as plain content text
+```
+
+**Expected output:**
+```html
+<figure class="img-annotated"><img src="https://example.com/pic.png" alt="alt text"><span class="img-note" tabindex="0" style="left:400px;top:300px" aria-label="Image annotation description"><span class="img-tip">Image annotation description</span></span><span class="img-note" tabindex="0" style="left:800px;top:800px" aria-label="Example of bottom-right annotation"><span class="img-tip">Example of bottom-right annotation</span></span></figure>
+<p>Text content
+^(100, 100): This is ignored and shown as plain content text</p>
+```
+The parser emits px coords relative to the image's natural (original) size.
+Generator-side behavior: `main.js` converts px → % of `naturalWidth/Height` once
+the image loads (notes track image bounds at any rendered width), centers bubbles
+on the coord (22px desktop / 28px touch), and positions the `.img-tip` tooltip
+within screen bounds on hover/focus — clamped to side margins, flipped below the
+bubble when near the viewport top. Default CSS placement (above-center) is the
+no-JS fallback.
+
+**Edge cases / notes:**
+- Image must be read from parser step.
+- Only whole-line markdown images (`![alt](src)`) carry annotations. Raw `<img>`
+  tag lines do NOT — the parser runs with `html: false`, so source-driven raw
+  attributes stay escaped (XSS-safe default). Supporting `<img>` would need an
+  attribute whitelist.
+- Annotation lines attach to the image line directly above them (no blank line
+  between). Blank lines or non-matching lines detach the annotation → rendered
+  as plain text.
+- Coordinates must be non-negative integers; non-numeric/negative coords keep
+  the line as plain text.
+- Annotation text is HTML-escaped (quotes included).
+- Tooltip is a real `.img-tip` element (not a CSS pseudo-element) so JS can
+  measure and clamp it within screen bounds; without JS it renders above-center
+  and may clip at the edge.
+- `ponytail:` px coords are relative to the image's natural size and converted
+  to % by `main.js` at runtime (browser knows natural size natively — no
+  build-time image fetching). If JS is disabled, notes render at natural-size
+  px positions and drift on scaled images — acceptable progressive fallback.

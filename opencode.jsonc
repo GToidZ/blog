@@ -1,0 +1,6 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "enabled_providers": ["openrouter"],
+  "model": "zai/glm-5.3-flash",
+  "plugin": ["@dietrichgebert/ponytail"]
+}
