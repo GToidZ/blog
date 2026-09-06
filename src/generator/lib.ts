@@ -17,6 +17,17 @@ export interface PostMeta {
 
 const FILENAME_RE = /^(\d{4}-\d{2}-\d{2})_(\d{2}-\d{2})_(.+)\.md$/;
 
+/**
+ * URL prefix for all site-rooted paths (e.g. "/blog" on project Pages).
+ * BASE_PATH env wins; else auto-derived from GITHUB_REPOSITORY (CI); else "" (site at domain root).
+ */
+export const base = (
+  process.env.BASE_PATH ??
+  (process.env.GITHUB_REPOSITORY?.includes("/")
+    ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}`
+    : "")
+).replace(/\/+$/, "");
+
 export function titleFromSlug(slug: string): string {
   return slug
     .replace(/-/g, " ")

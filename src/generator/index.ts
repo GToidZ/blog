@@ -2,6 +2,7 @@ import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseMarkdown } from "../parser/core";
 import {
+  base,
   esc,
   makePost,
   tagSlug,
@@ -53,7 +54,7 @@ export async function build(vaultDir: string, distDir: string): Promise<void> {
   const termDialogs = (used: string[]): Term[] =>
     used.map((n) => termMap.get(n)!).filter(Boolean);
 
-  const latestHref = posts.length > 0 ? `/entry/${esc(posts[0]!.name)}/` : "/";
+  const latestHref = posts.length > 0 ? `${base}/entry/${esc(posts[0]!.name)}/` : `${base}/`;
   const writePage = async (path: string, title: string, content: string, dialogs: Term[] = []) => {
     const file = join(distDir, path);
     mkdirSync(dirname(file), { recursive: true });
@@ -81,7 +82,7 @@ export async function build(vaultDir: string, distDir: string): Promise<void> {
       `tag/${tagSlug(tag)}/index.html`,
       `Tag: ${tag}`,
       `<h1 class="tag-heading">${ICON_HASH}${esc(tag)}</h1>\n<hr class="tag-divider">\n<ul class="post-list">${list.map((p) =>
-        `<li class="post-item"><article><h2 class="post-title"><a href="/entry/${esc(p.name)}/">${esc(p.title)}</a></h2><p class="entry-date"><time datetime="${esc(p.datetime)}">${esc(p.date)}</time></p></article></li>`
+        `<li class="post-item"><article><h2 class="post-title"><a href="${base}/entry/${esc(p.name)}/">${esc(p.title)}</a></h2><p class="entry-date"><time datetime="${esc(p.datetime)}">${esc(p.date)}</time></p></article></li>`
       ).join("\n")}</ul>`
     );
   }
@@ -91,7 +92,7 @@ export async function build(vaultDir: string, distDir: string): Promise<void> {
     "tags/index.html",
     "Tags",
     tagList.length
-      ? `<h1>Tags</h1>\n<ul class="tag-list">${tagList.map((t) => `<li><a href="/tag/${tagSlug(t)}/">${esc(t)}</a> (${byTag.get(t)!.length})</li>`).join("")}</ul>`
+      ? `<h1>Tags</h1>\n<ul class="tag-list">${tagList.map((t) => `<li><a href="${base}/tag/${tagSlug(t)}/">${esc(t)}</a> (${byTag.get(t)!.length})</li>`).join("")}</ul>`
       : "<h1>Tags</h1>\n<p>No tags yet.</p>"
   );
 
