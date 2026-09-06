@@ -1,5 +1,5 @@
 import { parseMarkdown } from "../parser/core";
-import { esc, renderBacklinks, tagSlug, type PostMeta } from "./lib";
+import { base, esc, renderBacklinks, tagSlug, type PostMeta } from "./lib";
 
 export interface Term {
   name: string;
@@ -17,7 +17,7 @@ const ICON_X = icon('<path d="M18 6L6 18M6 6l12 12"/>');
 const ICON_SUN = icon('<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>', "icon icon-sun");
 const ICON_MOON = icon('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>', "icon icon-moon");
 
-const tagLink = (tag: string) => `<a href="/tag/${tagSlug(tag)}/">${ICON_TAG}${esc(tag)}</a>`;
+const tagLink = (tag: string) => `<a href="${base}/tag/${tagSlug(tag)}/">${ICON_TAG}${esc(tag)}</a>`;
 
 const THEME_INIT = `(()=>{const s=localStorage.getItem("theme");if(s)document.documentElement.dataset.theme=s;else if(matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.dataset.theme="dark";})();`;
 
@@ -26,7 +26,7 @@ interface Page {
   content: string;
   dialogs: Term[];
   latestHref: string;
-  /** relative-less absolute hrefs like /entry/x — site is rooted */
+  /** site-rooted hrefs like /entry/x — prefixed with `base` (lib.ts) at build time */
 }
 
 export function renderPage(p: Page): string {
@@ -49,16 +49,16 @@ ${t.html}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(p.title)}</title>
 <link rel="stylesheet" href="${FONTS}">
-<link rel="stylesheet" href="/assets/hljs.css">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="${base}/assets/hljs.css">
+<link rel="stylesheet" href="${base}/assets/style.css">
 <script>${THEME_INIT}</script>
 </head>
 <body>
 <header class="site-header">
 <nav class="site-nav">
-<a href="/">Home</a>
+<a href="${base}/">Home</a>
 <a href="${esc(p.latestHref)}">Latest</a>
-<a href="/tags/">Tags</a>
+<a href="${base}/tags/">Tags</a>
 </nav>
 </header>
 <button id="theme-toggle" class="theme-toggle icon-btn" type="button" aria-label="Switch color theme">${ICON_SUN}${ICON_MOON}</button>
@@ -66,7 +66,7 @@ ${t.html}
 ${p.content}
 </main>
 ${dialogHtml}
-<script src="/assets/main.js"></script>
+<script src="${base}/assets/main.js"></script>
 </body>
 </html>
 `;
@@ -94,7 +94,7 @@ ${html}
 export function renderPostListItem(post: PostMeta): string {
   return `<li class="post-item">
 <article>
-<h2 class="post-title"><a href="/entry/${esc(post.name)}/">${esc(post.title)}</a></h2>
+<h2 class="post-title"><a href="${base}/entry/${esc(post.name)}/">${esc(post.title)}</a></h2>
 <p class="entry-date"><time datetime="${esc(post.datetime)}">${esc(post.date)}</time></p>
 ${post.tags.length ? `<ul class="entry-tags">${post.tags.map((t) => `<li>${tagLink(t)}</li>`).join("")}</ul>` : ""}
 </article>
@@ -112,7 +112,7 @@ export function renderIndex(posts: PostMeta[], page: number, pageCount: number):
 }
 
 function pageHref(page: number): string {
-  return page === 0 ? "/" : `/page/${page + 1}/`;
+  return page === 0 ? `${base}/` : `${base}/page/${page + 1}/`;
 }
 
 export const PAGE_SIZE = 10; // ponytail: fixed page size; make it config if 10 stops fitting
