@@ -24,6 +24,8 @@ jobs:
       - name: Smoke-build from stub vault
         run: bun src/generator/index.ts src/generator/test/fixture/vault /tmp/stub-dist
       - run: bun run generate
+        env:
+          BASE_PATH: "/"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
